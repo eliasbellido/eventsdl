@@ -1,0 +1,92 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion "29.0.1"
+
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
+
+        buildConfigField "String", "CONFERENCE_TIMEZONE", "\"${conference_timezone}\""
+        buildConfigField "String", "CONFERENCE_DAY1_START", "\"${conference_day1_start}\""
+        buildConfigField "String", "CONFERENCE_DAY1_END", "\"${conference_day1_end}\""
+        buildConfigField "String", "CONFERENCE_DAY2_START", "\"${conference_day2_start}\""
+        buildConfigField "String", "CONFERENCE_DAY2_END", "\"${conference_day2_end}\""
+        buildConfigField "String", "CONFERENCE_DAY3_START", "\"${conference_day3_start}\""
+        buildConfigField "String", "CONFERENCE_DAY3_END", "\"${conference_day3_end}\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.incremental":"true"
+                ]
+            }
+        }
+
+    }
+
+    buildTypes {
+        release {
+            buildConfigField "String", "REGISTRATION_ENDPOINT_URL", "\"https://events-d07ac.appspot.com/_ah/api/registration/v1/register\""
+            buildConfigField "String", "CONFERENCE_DATA_URL", "\"https://firebasestorage.googleapis.com/v0/b/io2019-festivus-prod/o/sessions.json?alt=media&token=89140adf-e228-45a5-9ae3-8ed01547166a\""
+        }
+        debug{
+            buildConfigField "String", "REGISTRATION_ENDPOINT_URL", "\"https://events-dev-62d2e.appspot.com/_ah/api/registration/v1/register\""
+            buildConfigField "String", "CONFERENCE_DATA_URL", "\"https://firebasestorage.googleapis.com/v0/b/io2019-festivus/o/sessions.json?alt=media&token=019af2ec-9fd1-408e-9b86-891e4f66e674\""
+        }
+
+    }
+
+}
+
+dependencies {
+    api project(":model")
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.core:core-ktx:1.1.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
+    // Architecture Components
+    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata:$rootProject.lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$rootProject.lifecycleVersion"
+    implementation "androidx.room:room-ktx:$rootProject.roomVersion"
+    implementation "androidx.room:room-runtime:$rootProject.roomVersion"
+    kapt "androidx.room:room-compiler:$rootProject.roomVersion"
+
+    // Firebase
+    api "com.google.firebase:firebase-auth:$rootProject.firebaseAuthVersion"
+    api "com.google.firebase:firebase-config:$rootProject.firebaseConfigVersion"
+    api "com.google.firebase:firebase-core:$rootProject.firebaseCoreVersion"
+    api "com.google.firebase:firebase-firestore:$rootProject.firebaseFirestoreVersion"
+    api "com.google.firebase:firebase-functions:$rootProject.firebaseFunctionsVersion"
+    api "com.google.firebase:firebase-messaging:$rootProject.firebaseMessagingVersion"
+
+    // Utils
+    api "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+
+    // OkHttp
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okhttpVersion"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okhttpVersion"
+
+
+    // Dagger
+    implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+}
